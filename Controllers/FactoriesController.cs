@@ -24,13 +24,23 @@ namespace FactoryAPI.Controllers
         [HttpGet(Name = "GetFactory")]
         public UserFactory GetFactory([FromQuery] int id)
         {
-            var factory = _context.Factory.Find(id);
-
-            if (factory is null)
+            Factory? factory;
+            UserFactory userFactory = new();
+            try
             {
-                throw new ArgumentNullException(nameof(factory), nameof(factory) + " cannot be null.");
+                factory = _context.Factory.Find(id);
+
+                if (factory is null)
+                {
+                    throw new ArgumentNullException(nameof(factory), nameof(factory) + " cannot be null.");
+                }
+
+                userFactory = new(factory);
             }
-            UserFactory userFactory = new(factory);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             return userFactory;
         }
 

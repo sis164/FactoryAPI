@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FactoryAPI.Models;
+using Npgsql;
 
 namespace FactoryAPI.Controllers
 {
@@ -8,7 +9,14 @@ namespace FactoryAPI.Controllers
         public DbSet<Factory> Factory { get; set; }
         public ApplicationContext()
         {
-            Database.EnsureCreated();
+            try
+            {
+                Database.EnsureCreated();
+            }
+            catch (NpgsqlException exception)
+            {
+                Console.WriteLine(exception.Message);
+            }
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
