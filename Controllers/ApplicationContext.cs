@@ -7,6 +7,7 @@ namespace FactoryAPI.Controllers
     public class ApplicationContext : DbContext
     {
         public DbSet<Factory> Factory { get; set; }
+        public DbSet<Client> Client { get; set; }
         public ApplicationContext()
         {
             try
