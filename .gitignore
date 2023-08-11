@@ -3,6 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+dir_to_ignore/pictures
 # User-specific files
 *.rsuser
 *.suo

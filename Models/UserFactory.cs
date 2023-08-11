@@ -1,4 +1,5 @@
-﻿namespace FactoryAPI.Models
+﻿using FactoryAPI.Utilities;
+namespace FactoryAPI.Models
 {
     public class UserFactory
     {
@@ -21,14 +22,7 @@
             Name = factory.Name;
             Description = factory.Description;
             Phone_number = factory.Phone_number;
-            try
-            {
-                Picture = File.ReadAllBytes(factory.Picture);
-            }
-            catch (FileNotFoundException exception)
-            {
-                Console.WriteLine(exception.Message);
-            }
+            Picture = PictureConverter.ReadImage(factory.Picture);
         }
     }
 }
