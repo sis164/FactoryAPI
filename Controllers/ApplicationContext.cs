@@ -8,6 +8,7 @@ namespace FactoryAPI.Controllers
     {
         public DbSet<Factory> Factory { get; set; }
         public DbSet<Client> Client { get; set; }
+        public DbSet<Employee> Employee { get; set; }
         public ApplicationContext()
         {
             try

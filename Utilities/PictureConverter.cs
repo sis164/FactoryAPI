@@ -7,7 +7,7 @@ namespace FactoryAPI.Utilities
         static public string SaveImageGetPath(string Base64Image, string name)
         {
             byte[] bytes = Convert.FromBase64String(Base64Image);
-            string path = "pictures/" + name + ".png";
+            string path = "C:\\Users\\User\\Desktop\\local repos\\FactoryAPI\\pictures\\" + name + ".png";
             System.IO.File.WriteAllBytes(path, bytes);
             return path;
         }

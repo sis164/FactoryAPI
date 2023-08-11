@@ -19,7 +19,7 @@ namespace FactoryAPI.Utilities
 
         public static bool IsValidPhone_number(string value)
         {
-            Regex regex = new("^[+]?[0-9]{1,3}([(][0-9]{2,3}[)])?([0-9]{2,3})?[0-9]{2}[-]?[0-9]{2}[-]?[0-9]{3}$");
+            Regex regex = new("^[+]?[0-9]{1,3}([(][0-9]{2,3}[)])?([0-9]{2,3})?[0-9]{3}[-]?[0-9]{2}[-]?[0-9]{2}$");
             return regex.IsMatch(value);
         }
     }

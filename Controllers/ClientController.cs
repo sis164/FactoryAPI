@@ -1,4 +1,5 @@
 ﻿using FactoryAPI.Models;
+using FactoryAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 
@@ -32,10 +33,12 @@ namespace FactoryAPI.Controllers
         [HttpPost(Name = "PostClient")]
         public void PostClient([FromQuery] string First_name, string Second_name, string Patronym, string Phone_number)
         {
-            Client client = new Client(First_name, Second_name, Patronym, Phone_number);
-            _context.Client.Add(client);
-            _context.SaveChanges();
-
+            if (RegexValidator.IsValidPhone_number(Phone_number) && RegexValidator.IsValidName(First_name) && RegexValidator.IsValidName(Second_name) && RegexValidator.IsValidName(Patronym))
+            {
+                Client client = new(First_name, Second_name, Patronym, Phone_number);
+                _context.Client.Add(client);
+                _context.SaveChanges();
+            }
         }
     }
 }
