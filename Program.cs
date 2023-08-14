@@ -26,6 +26,7 @@ internal class Program
             app.UseSwaggerUI();
         }
 
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         app.UseRouting();
         app.UseEndpoints(endpoints =>
         {

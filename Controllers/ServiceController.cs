@@ -1,6 +1,7 @@
 ﻿using FactoryAPI.Models;
 using FactoryAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using Npgsql.Internal.TypeHandlers.NumericHandlers;
 
 namespace FactoryAPI.Controllers
 {
@@ -30,13 +31,11 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpPost(Name = "PostService")]
-        public void PostService([FromQuery] string name, string description, decimal cost)
+        public void PostService(string name, string description, double cost)
         {
-           
-            Service service = new(name,description,cost);
+            Service service = new(name,description, cost);
             _context.Service.Add(service);
             _context.SaveChanges();
-            
         }
     }
 }

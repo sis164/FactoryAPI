@@ -30,10 +30,10 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpPost(Name = "PostCardOperation")]
-        
-        public void PostCardOperation(int card_id, int service_id, [FromQuery] DateOnly date, [FromQuery] TimeOnly time, decimal result_cost)
+
+        public void PostCardOperation(int card_id, int service_id, string date, string time, double result_cost)
         {
-            CardOperation cardOperation = new(card_id,service_id,date,time,result_cost);
+            CardOperation cardOperation = new(card_id, service_id, date, time, result_cost);
             _context.CardOperations.Add(cardOperation);
             _context.SaveChanges();
         }

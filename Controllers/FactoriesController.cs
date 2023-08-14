@@ -42,11 +42,21 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpPost(Name = "PostFactory")]
-        public void PostFactory([FromQuery] string name, string description, string phone, string picture)
+        public void PostFactory(string name, string description, string phone, string picture, [FromQuery] int[]? services)
         {
             if (RegexValidator.IsValidCompanyName(name) && RegexValidator.IsValidPhone_number(phone))
             {
-                Factory factory = new() { Name = name, Description = description, Phone_number = phone, Picture = PictureConverter.SaveImageGetPath(picture, name) };
+
+                if (services != null)
+                {
+                    foreach (int Id in services)
+                    {
+                        if(_context.Service.Find(Id) is null)
+                            throw new ArgumentOutOfRangeException(nameof(Id), "Some Id's are not in the Database");
+                    }
+                }
+
+                Factory factory = new() { Name = name, Description = description, Phone_number = phone, Picture = PictureConverter.SaveImageGetPath(picture, name), Services = services };
                 _context.Factory.Add(factory);
                 _context.SaveChanges();
             }
