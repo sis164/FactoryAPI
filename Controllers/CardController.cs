@@ -34,9 +34,9 @@ namespace FactoryAPI.Controllers
             CodeGenerator codeGenerator = new(_context);
 
             Card card = new(Client_id, codeGenerator.GenerateCode());
-
+            
             _context.Add(card);
-            _context.SaveChanges();
+            int state = _context.SaveChanges();
         }
     }
 }
