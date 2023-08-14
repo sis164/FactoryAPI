@@ -7,7 +7,7 @@ namespace FactoryAPI.Utilities
     {
         public static bool IsValidName(string name)
         {
-            Regex regex = new("^[a - zA - Zа - яА - Я] +[-]?[a - zA - Zа - яА - Я] *$");
+            Regex regex = new("^[a-zA-Zа-яА-Я]+[-]?[a-zA-Zа-яА-Я]*$");
             return regex.IsMatch(name);
         }
 
