@@ -1,10 +1,11 @@
 ﻿using FactoryAPI.Models;
+using FactoryAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FactoryAPI.Controllers
 {
     [ApiController]
-    [Route("/controller")]
+    [Route("/[controller]")]
     public class CardController : Controller
     {
         private readonly ApplicationContext _context;
@@ -25,6 +26,17 @@ namespace FactoryAPI.Controllers
             }
 
             return card;
+        }
+
+        [HttpPost(Name = "PostCard")]
+        public void PostCard(int Client_id)
+        {
+            CodeGenerator codeGenerator = new(_context);
+
+            Card card = new(Client_id, codeGenerator.GenerateCode());
+
+            _context.Add(card);
+            _context.SaveChanges();
         }
     }
 }
