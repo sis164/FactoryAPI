@@ -6,6 +6,7 @@ namespace FactoryAPI.Controllers
 {
     public class ApplicationContext : DbContext
     {
+        public DbSet<Card> Card { get; set; }
         public DbSet<Factory> Factory { get; set; }
         public DbSet<Client> Client { get; set; }
         public DbSet<Employee> Employee { get; set; }
