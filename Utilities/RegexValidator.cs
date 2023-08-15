@@ -22,5 +22,13 @@ namespace FactoryAPI.Utilities
             Regex regex = new("^[+]?[0-9]{1,3}([(][0-9]{2,3}[)])?([0-9]{2,3})?[0-9]{3}[-]?[0-9]{2}[-]?[0-9]{2}$");
             return regex.IsMatch(value);
         }
+
+        public static bool IsValidMail(string mail)
+        {
+            Regex regex = new("^\\w+[-+\\.\\w]*[\\w]@[a-z]+[\\.][a-z]{2,3}$");
+            return regex.IsMatch(mail);
+        }
+
+       
     }
 }

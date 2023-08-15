@@ -12,6 +12,7 @@ namespace FactoryAPI.Controllers
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Service> Service { get; set; }
         public DbSet<CardOperation> CardOperations { get; set; }
+        public DbSet<User> User { get; set; }
         public ApplicationContext()
         {
             try
