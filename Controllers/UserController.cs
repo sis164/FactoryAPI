@@ -19,17 +19,21 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpGet(Name = "GetUser")]
-        //public User GetUser(int id)
-        //{
+        public User GetUser(int id)
+        {
 
-        //}
+        }
 
         [HttpPost(Name = "PostUser")]
         public void PostUser(string login, string mail, string password)
         {
             if (!RegexValidator.IsValidMail(mail))
             {
-                throw new ArgumentException("Wrong mail");
+                throw new ArgumentException($"{nameof(mail)} is invalid.");
+            }
+            if (!RegexValidator.IsValidLogin(login))
+            {
+                throw new ArgumentException($"{nameof(login)} is invalid.");
             }
             User user = new(login, HashFunction.GetHashPassword(password), mail);
             _context.User.Add(user);
