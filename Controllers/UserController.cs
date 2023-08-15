@@ -9,20 +9,12 @@ namespace FactoryAPI.Controllers
     [Route("/[controller]")]
     public class UserController : Controller
     {
-
-
         private readonly ApplicationContext _context;
 
         public UserController(ApplicationContext context)
         {
             _context = context;
         }
-
-        [HttpGet(Name = "GetUser")]
-        //public User GetUser(int id)
-        //{
-
-        //}
 
         [HttpPost(Name = "PostUser")]
         public void PostUser(string login, string mail, string password)
