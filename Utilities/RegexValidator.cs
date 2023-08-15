@@ -10,6 +10,11 @@ namespace FactoryAPI.Utilities
             Regex regex = new("^[a-zA-Zа-яА-Я]+[-]?[a-zA-Zа-яА-Я]*$");
             return regex.IsMatch(name);
         }
+        public static bool IsValidLogin(string login)
+        {
+            Regex regex = new("^[a-zA-Z-_\\d]+$");
+            return regex.IsMatch(login);
+        }
 
         public static bool IsValidCompanyName(string name)
         {
