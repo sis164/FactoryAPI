@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FactoryAPI.Controllers
 {
@@ -42,6 +43,13 @@ namespace FactoryAPI.Controllers
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
+        }
+
+        [Authorize]
+        [Route("getlogin")]
+        public IActionResult GetLogin()
+        {
+            return Ok($"Ваш логин: {User.Identity.Name}");
         }
 
         private ClaimsIdentity? GetIdentity(string login, string password)
