@@ -46,10 +46,10 @@ namespace FactoryAPI.Controllers
         }
 
         [Authorize]
-        [Route("getlogin")]
-        public IActionResult GetLogin()
+        [HttpGet(Name = "GetLogin")]
+        public string GetLogin()
         {
-            return Ok($"Ваш логин: {User.Identity.Name}");
+            return Ok($"Your login{User.Identity.Name}").ToString();
         }
 
         private ClaimsIdentity? GetIdentity(string login, string password)
