@@ -47,11 +47,9 @@ namespace FactoryAPI.Controllers
 
         [Authorize]
         [HttpGet(Name = "GetLogin")]
-        public string GetLogin(string token)
+        public string? GetLogin()
         {
-            var securityToken = new JwtSecurityTokenHandler().ReadToken(token);
-            var login = securityToken.ToString();
-            return login;
+            return Ok().ToString();
         }
 
         private ClaimsIdentity? GetIdentity(string login, string password)
@@ -68,7 +66,7 @@ namespace FactoryAPI.Controllers
                     new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login),
                 };
             ClaimsIdentity claimsIdentity =
-            new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType);
 
             return claimsIdentity;
         }
