@@ -47,9 +47,11 @@ namespace FactoryAPI.Controllers
 
         [Authorize]
         [HttpGet(Name = "GetLogin")]
-        public string GetLogin()
+        public string GetLogin(string token)
         {
-            return Ok($"Your login{User.Identity.Name}").ToString();
+            var securityToken = new JwtSecurityTokenHandler().ReadToken(token);
+            var login = securityToken.ToString();
+            return login;
         }
 
         private ClaimsIdentity? GetIdentity(string login, string password)
