@@ -39,17 +39,18 @@ namespace FactoryAPI.Controllers
                     audience: AuthOptions.AUDIENCE,
                     notBefore: now,
                     claims: identity.Claims,
+                    
                     expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
-        [Authorize]
         [HttpGet(Name = "GetLogin")]
         public string? GetLogin()
         {
-            return Ok().ToString();
+            var securityToken = new JwtSecurityTokenHandler().ReadToken(token);
+            return securityToken.ToString();
         }
 
         private ClaimsIdentity? GetIdentity(string login, string password)
@@ -64,9 +65,10 @@ namespace FactoryAPI.Controllers
             var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login),
+                    new Claim("User id:", person.Id.ToString())
                 };
             ClaimsIdentity claimsIdentity =
-            new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType);
+            new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
             return claimsIdentity;
         }
