@@ -29,19 +29,31 @@ namespace FactoryAPI.Controllers
             }
             return employee;
         }
+
         [HttpPost(Name = "PostEmployee")]
-        public void PostEmployee([FromQuery]int object_id, string first_name, string second_name, string patronym, string specialization, string phone)
+        public void PostEmployee([FromQuery] int[] factory_id, string first_name, string second_name, string patronym, string specialization)
         {
-            if (RegexValidator.IsValidName(first_name) && RegexValidator.IsValidName(second_name) && RegexValidator.IsValidName(patronym) && RegexValidator.IsValidPhone_number(phone))
+            if (RegexValidator.IsValidName(first_name) && RegexValidator.IsValidName(second_name) && RegexValidator.IsValidName(patronym))
             {
+                if (factory_id is null)
+                {
+                    throw new ArgumentNullException(nameof(factory_id), $"{nameof(factory_id)} is null");
+                }
+
+                foreach (int factroryId in factory_id)
+                {
+                    if (_context.Factory.Find(factroryId) == null)
+                        throw new ArgumentOutOfRangeException(nameof(factroryId), "Some factories are not in the Database");
+                }
+
+
                 Employee employee = new()
                 {
-                    Object_id = object_id,
+                    Factorys_id = factory_id,
                     First_name = first_name,
                     Second_name = second_name,
                     Patronym = patronym,
                     Specialization = specialization,
-                    Phone_number = phone
                 };
                 _context.Employee.Add(employee);
                 _context.SaveChanges();

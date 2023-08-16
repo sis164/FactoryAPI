@@ -29,6 +29,23 @@ internal class Program
                 In = ParameterLocation.Header,
                 Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
             });
+            swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[]
+                    {
+
+                    }
+                }
+            });
         });
         builder.Services.AddControllers(); // Register controllers
 
@@ -55,7 +72,7 @@ internal class Program
                 ValidateIssuerSigningKey = true,
             };
         });
-
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         builder.Services.AddDbContext<ApplicationContext>();
 
         var app = builder.Build();

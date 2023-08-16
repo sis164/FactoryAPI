@@ -31,11 +31,11 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpPost(Name = "PostClient")]
-        public void PostClient([FromQuery] string First_name, string Second_name, string Patronym, string Phone_number)
+        public void PostClient([FromQuery] string First_name, string Second_name, string Patronym)
         {
-            if (RegexValidator.IsValidPhone_number(Phone_number) && RegexValidator.IsValidName(First_name) && RegexValidator.IsValidName(Second_name) && RegexValidator.IsValidName(Patronym))
+            if (RegexValidator.IsValidName(First_name) && RegexValidator.IsValidName(Second_name) && RegexValidator.IsValidName(Patronym))
             {
-                Client client = new(First_name, Second_name, Patronym, Phone_number);
+                Client client = new(First_name, Second_name, Patronym);
                 _context.Client.Add(client);
                 _context.SaveChanges();
             }

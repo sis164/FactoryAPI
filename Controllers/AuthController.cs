@@ -46,11 +46,11 @@ namespace FactoryAPI.Controllers
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
+        [Authorize]
         [HttpGet(Name = "GetLogin")]
-        public string? GetLogin(string token)
+        public string? GetLogin()
         {
-            var securityToken = new JwtSecurityTokenHandler().ReadToken(token);
-            return securityToken.ToString();
+            return Ok().ToString();
         }
 
         private ClaimsIdentity? GetIdentity(string login, string password)
