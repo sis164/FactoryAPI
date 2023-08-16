@@ -47,7 +47,7 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpGet(Name = "GetLogin")]
-        public string? GetLogin()
+        public string? GetLogin(string token)
         {
             var securityToken = new JwtSecurityTokenHandler().ReadToken(token);
             return securityToken.ToString();
