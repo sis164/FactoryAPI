@@ -18,8 +18,7 @@ namespace FactoryAPI.Controllers
         [HttpGet(Name = "GetCardOperation")]
         public IActionResult GetCardOperation(int id)
         {
-            CardOperation? cardOperation;
-            cardOperation = _context.CardOperations.Find(id);
+            var cardOperation = _context.CardOperations.Find(id);
 
             if (cardOperation is null)
             {

@@ -39,9 +39,16 @@ namespace FactoryAPI.Utilities
             } while (System.IO.File.Exists(path));
             return path;
         }
-        static public byte[] ReadImage(string path)
+        static public List<byte[]> ReadImage(string path)
         {
-            return File.ReadAllBytes(path);
+            DirectoryInfo directory = new DirectoryInfo(path);
+            var files = directory.GetFiles();
+            List<byte[]> result = new List<byte[]>(); 
+            foreach (var file in files)
+            {
+                result.Add(File.ReadAllBytes(file.FullName));
+            }
+            return result;
         }
     }
 }

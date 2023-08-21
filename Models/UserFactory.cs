@@ -6,16 +6,8 @@ namespace FactoryAPI.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public byte[]? Picture { get; set; }
+        public List<byte[]>? Picture { get; set; }
         public string Phone_number { get; set; }
-
-        public UserFactory()
-        {
-            Name = string.Empty;
-            Description = string.Empty;
-            Phone_number = string.Empty;
-            Picture = Array.Empty<byte>();
-        }
         public UserFactory(Factory factory)
         {
             Id = factory.Id;

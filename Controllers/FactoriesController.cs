@@ -28,7 +28,6 @@ namespace FactoryAPI.Controllers
         public IActionResult GetFactory([FromQuery] int id)
         {
             Factory? factory;
-            UserFactory userFactory = new();
 
             factory = _context.Factory.Find(id);
 
@@ -37,7 +36,7 @@ namespace FactoryAPI.Controllers
                 return BadRequest("Предприятие не существует(");
             }
 
-            userFactory = new(factory);
+            UserFactory userFactory = new(factory);
 
             return Ok(userFactory);
         }
