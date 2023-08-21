@@ -11,16 +11,6 @@ namespace FactoryAPI.Models
         public DateTime Time { get; set; }
         public double Result_cost { get; set; }
 
-        public CardOperation(int id, int card_id, int service_id, DateTime date, DateTime time, double result_cost)
-        {
-            Id = id;
-            Card_id = card_id;
-            Service_id = service_id;
-            Date = date;
-            Time = time;
-            Result_cost = result_cost;
-        }
-
         public CardOperation(int card_id, int service_id, string date, string time, double result_cost)
         {
             Card_id = card_id;
