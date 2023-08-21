@@ -15,28 +15,36 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpGet(Name = "GetCard")]
-        public Card GetCard(int id)
+        public IActionResult GetCard(int id)
         {
             Card? card;
             card = _context.Card.Find(id);
 
             if (card is null)
             {
-                throw new ArgumentNullException(nameof(card), nameof(card) + " cannot be null.");
+                return BadRequest("Нет карты с таким id");
             }
 
-            return card;
+            return Ok(card);
         }
 
         [HttpPost(Name = "PostCard")]
-        public void PostCard(int Client_id)
+        public IActionResult PostCard(int Client_id)
         {
+
+            if (_context.Client.Find(Client_id) is null)
+            {
+                return BadRequest("Клиент с таким id не существует.");
+            }
+
             CodeGenerator codeGenerator = new(_context);
 
             Card card = new(Client_id, codeGenerator.GenerateCode());
-            
+
             _context.Add(card);
-            int state = _context.SaveChanges();
+            _context.SaveChanges();
+
+            return Ok("Карта зарегистрирована успешно");
         }
     }
 }

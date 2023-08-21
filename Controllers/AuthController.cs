@@ -22,35 +22,33 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpPost(Name = "GetToken")]
-        public string GetToken(string login, string password)
+        public IActionResult GetToken(string login, string password)
         {
             password = HashFunction.GetHashPassword(password);
             var identity = GetIdentity(login, password);
 
             if (identity == null)
             {
-                throw new Exception("login or password is invalid");
+                return BadRequest("Неверный логин или пароль.");
             }
 
-            var now = DateTime.UtcNow;
-            // создаем JWT-токен
             var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.ISSUER,
                     audience: AuthOptions.AUDIENCE,
-                    notBefore: now,
+                    notBefore: DateTime.UtcNow,
                     claims: identity.Claims,
-                    
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
+            );
 
-            return new JwtSecurityTokenHandler().WriteToken(jwt);
+            return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
         }
 
         [Authorize]
         [HttpGet(Name = "GetLogin")]
-        public string? GetLogin()
+        public IActionResult GetLogin()
         {
-            return Ok().ToString();
+            return Ok();
         }
 
         private ClaimsIdentity? GetIdentity(string login, string password)
