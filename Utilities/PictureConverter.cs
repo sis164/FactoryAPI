@@ -3,23 +3,29 @@ using System.Linq;
 
 namespace FactoryAPI.Utilities
 {
-    static public class PictureConverter
+    public class PictureConverter
     {
-        static public string SaveImageGetPath(string Base64Image, string name)
+        static public string SaveImageGetPath(string[] Base64Images, string name)
         {
-            byte[] bytes = Convert.FromBase64String(Base64Image);
-            string path = UpdatePath(name);
-            System.IO.File.WriteAllBytes(path, bytes);
-            return path;
+            string folderName = "\\pictures\\" + name;
+            var directory = Directory.CreateDirectory(Directory.GetCurrentDirectory() + folderName);
+            foreach (var Base64Image in Base64Images) 
+            {
+                byte[] bytes = Convert.FromBase64String(Base64Image);
+                string path = UpdatePath(name,directory);
+                System.IO.File.WriteAllBytes(path, bytes);
+                
+            }
+            return directory.FullName;
         }
 
-        static private string UpdatePath(string name)
+        static private string UpdatePath(string name, DirectoryInfo directoryInfo)
         {
             string path;
             int count = 2;
             do
             {
-                path = "C:\\Users\\User\\Desktop\\local repos\\FactoryAPI\\pictures\\" + name + ".png";
+                path = $"{directoryInfo.FullName}\\{name}.png";
                 if (System.IO.File.Exists(path))
                 {
                     if (!name.Contains('_'))

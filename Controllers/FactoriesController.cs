@@ -43,36 +43,17 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpPost(Name = "PostFactory")]
-        public IActionResult PostFactory(string name, string description, string phone, string picture, [FromQuery] int[]? services, [FromQuery] List<int>? employee_id)
+        public IActionResult PostFactory(string name, string description, string phone, [FromBody] string[] pictures)
         {
             if (RegexValidator.IsValidCompanyName(name) && RegexValidator.IsValidPhone_number(phone))
-            {
-
-                if (services != null)
-                {
-                    foreach (int Id in services)
-                    {
-                        if (_context.Service.Find(Id) is null)
-                            return BadRequest("Некоторые сервисы не зарегистрированы");
-                    }
-                }
-
-                if (employee_id != null)
-                {
-                    foreach (int Id in employee_id)
-                    {
-                        if (_context.Employee.Find(Id) is null)
-                            return BadRequest("Некоторые работники не заригистрированы");
-                    }
-                }
-
-                Factory factory = new() { Name = name, Description = description, Phone_number = phone, Picture = PictureConverter.SaveImageGetPath(picture, name), Services = services, Employee_id = employee_id };
+            { 
+                Factory factory = new() { Name = name, Description = description, Phone_number = phone, Picture = PictureConverter.SaveImageGetPath(pictures, name) };
                 _context.Factory.Add(factory);
                 _context.SaveChanges();
             }
             else
             {
-                return BadRequest("Название придприятия или номер телефона не корректны(");
+                return BadRequest("Название предприятия или номер телефона не корректны(");
             }
             return Ok("Предприятие зарегистрировано");
         }

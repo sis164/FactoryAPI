@@ -33,6 +33,20 @@ namespace FactoryAPI.Controllers
         [HttpPost(Name = "PostEmployee")]
         public IActionResult PostEmployee([FromQuery] int[] factory_id, string first_name, string second_name, string patronym, string specialization)
         {
+
+            if (!RegexValidator.IsValidName(first_name))
+            {
+                return BadRequest("Имя пользователя не верно.");
+            }
+            if (!RegexValidator.IsValidName(second_name))
+            {
+                return BadRequest("Фамилия пользователя не верна.");
+            }
+            if (!RegexValidator.IsValidName(patronym))
+            {
+                return BadRequest("Отчество пользователя не верно.");
+            }
+
             if (RegexValidator.IsValidName(first_name) && RegexValidator.IsValidName(second_name) && RegexValidator.IsValidName(patronym))
             {
                 if (factory_id is null)
@@ -57,10 +71,6 @@ namespace FactoryAPI.Controllers
                 };
                 _context.Employee.Add(employee);
                 _context.SaveChanges();
-            }
-            else
-            {
-                return BadRequest("Имя работника или номер телефона не корректны(");
             }
             return Ok("Работник успешно зарегистрирован");
         }
