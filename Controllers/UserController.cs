@@ -31,6 +31,10 @@ namespace FactoryAPI.Controllers
             {
                 throw new ArgumentException($"{nameof(phone_number)} is invalid.");
             }
+            if (_context.User.FirstOrDefault(x => x.Phone_number == phone_number) is not null)
+            {
+                throw new ArgumentException($"{nameof(phone_number)} is exists.");
+            }
             User user = new(login, HashFunction.GetHashPassword(password),phone_number);
             _context.User.Add(user);
             _context.SaveChanges();
