@@ -93,6 +93,8 @@ internal class Program
         });
         app.UseHttpsRedirection();
 
+        app.MapGet("/", () => "hello world");
+
         app.Run();
 
 

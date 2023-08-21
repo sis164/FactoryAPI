@@ -26,7 +26,7 @@ namespace FactoryAPI.Controllers
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=db_enterprise;Username=postgres;Password=ssddss123");
+            optionsBuilder.UseNpgsql("Host=host.docker.internal;Port=5432;Database=db_enterprise;Username=postgres;Password=ssddss123");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
