@@ -17,28 +17,40 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpGet(Name = "GetClient")]
-        public Client GetClient(int id)
+        public IActionResult GetClient(int id)
         {
             Client? client;
             client = _context.Client.Find(id);
 
             if (client is null)
             {
-                throw new ArgumentNullException(nameof(client), nameof(client) + " cannot be null.");
+                return BadRequest("Нет клиента с таким id");
             }
 
-            return client;
+            return Ok(client);
         }
 
         [HttpPost(Name = "PostClient")]
-        public void PostClient([FromQuery] string First_name, string Second_name, string Patronym)
+        public IActionResult PostClient(string First_name, string Second_name, string Patronym)
         {
-            if (RegexValidator.IsValidName(First_name) && RegexValidator.IsValidName(Second_name) && RegexValidator.IsValidName(Patronym))
+            if (!RegexValidator.IsValidName(First_name))
             {
-                Client client = new(First_name, Second_name, Patronym);
-                _context.Client.Add(client);
-                _context.SaveChanges();
+                return BadRequest("Имя пользователя не верно.");
             }
+            if (!RegexValidator.IsValidName(Second_name))
+            {
+                return BadRequest("Фамилия пользователя не верна.");
+            }
+            if (!RegexValidator.IsValidName(Patronym))
+            {
+                return BadRequest("Отчество пользователя не верно.");
+            }
+
+            Client client = new(First_name, Second_name, Patronym);
+            _context.Client.Add(client);
+            _context.SaveChanges();
+
+            return Ok(client);
         }
     }
 }

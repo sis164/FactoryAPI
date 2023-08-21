@@ -16,26 +16,27 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpGet(Name = "GetCardOperation")]
-        public CardOperation GetCardOperation(int id)
+        public IActionResult GetCardOperation(int id)
         {
             CardOperation? cardOperation;
             cardOperation = _context.CardOperations.Find(id);
 
             if (cardOperation is null)
             {
-                throw new ArgumentNullException(nameof(cardOperation), nameof(cardOperation) + " cannot be null.");
+                return BadRequest("Нет операции карт с таким id");
             }
 
-            return cardOperation;
+            return Ok(cardOperation);
         }
 
         [HttpPost(Name = "PostCardOperation")]
-
-        public void PostCardOperation(int card_id, int service_id, string date, string time, double result_cost)
+        public IActionResult PostCardOperation(int card_id, int service_id, string date, string time, double result_cost)
         {
             CardOperation cardOperation = new(card_id, service_id, date, time, result_cost);
             _context.CardOperations.Add(cardOperation);
             _context.SaveChanges();
+
+            return Ok(cardOperation);
         }
     }
 }
