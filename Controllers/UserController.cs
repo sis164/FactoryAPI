@@ -20,24 +20,24 @@ namespace FactoryAPI.Controllers
 
 
         [HttpPost(Name = "PostUser")]
-        public void PostUser(string login,  string password, string phone_number)
+        public IActionResult PostUser(string login,  string password, string phone_number)
         {
-
             if (!RegexValidator.IsValidLogin(login))
             {
-                throw new ArgumentException($"{nameof(login)} is invalid.");
+                return BadRequest("Логин пользователя не корректен.");
             }
             if(!RegexValidator.IsValidPhone_number(phone_number))
             {
-                throw new ArgumentException($"{nameof(phone_number)} is invalid.");
+                return BadRequest("Номер телефона не корректен.");
             }
             if (_context.User.FirstOrDefault(x => x.Phone_number == phone_number) is not null)
             {
-                throw new ArgumentException($"{nameof(phone_number)} is exists.");
+                return BadRequest("Пользователь с таким номером телефона уже существует.");
             }
             User user = new(login, HashFunction.GetHashPassword(password),phone_number);
             _context.User.Add(user);
             _context.SaveChanges();
+            return Ok("Пользователь зарегистрирован.");
         }
 
 
