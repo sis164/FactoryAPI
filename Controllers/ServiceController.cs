@@ -17,17 +17,17 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpGet(Name = "GetService")]
-        public Service GetService(int id)
+        public IActionResult GetService(int id)
         {
             Service? service;
             service = _context.Service.Find(id);
 
             if (service is null)
             {
-                throw new ArgumentNullException(nameof(service), nameof(service) + " cannot be null.");
+                return BadRequest("Сервис не существует(");
             }
 
-            return service;
+            return Ok(service);
         }
 
         [HttpPost(Name = "PostService")]

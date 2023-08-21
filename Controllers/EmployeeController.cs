@@ -18,32 +18,32 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpGet(Name = "GetEmployee")]
-        public Employee GetEmployee(int Id)
+        public IActionResult GetEmployee(int Id)
         {
             Employee? employee;
             employee = _context.Employee.Find(Id);
 
             if (employee == null)
             {
-                throw new ArgumentNullException(nameof(employee), nameof(employee) + " cannot be null.");
+                return BadRequest("Работник не существует");
             }
-            return employee;
+            return Ok(employee);
         }
 
         [HttpPost(Name = "PostEmployee")]
-        public void PostEmployee([FromQuery] int[] factory_id, string first_name, string second_name, string patronym, string specialization)
+        public IActionResult PostEmployee([FromQuery] int[] factory_id, string first_name, string second_name, string patronym, string specialization)
         {
             if (RegexValidator.IsValidName(first_name) && RegexValidator.IsValidName(second_name) && RegexValidator.IsValidName(patronym))
             {
                 if (factory_id is null)
                 {
-                    throw new ArgumentNullException(nameof(factory_id), $"{nameof(factory_id)} is null");
+                    return BadRequest("Предприятие не найдено");
                 }
 
                 foreach (int factroryId in factory_id)
                 {
                     if (_context.Factory.Find(factroryId) == null)
-                        throw new ArgumentOutOfRangeException(nameof(factroryId), "Some factories are not in the Database");
+                        return BadRequest("Некоторые предприятия не в зарегистрированы");
                 }
 
 
@@ -60,8 +60,9 @@ namespace FactoryAPI.Controllers
             }
             else
             {
-                throw new ArgumentException("Employee name or phone number is wrong");
+                return BadRequest("Имя работника или номер телефона не корректны(");
             }
+            return Ok("Работник успешно зарегистрирован");
         }
 
     }

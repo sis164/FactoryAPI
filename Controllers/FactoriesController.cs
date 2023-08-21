@@ -25,7 +25,7 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpGet(Name = "GetFactory")]
-        public UserFactory GetFactory([FromQuery] int id)
+        public IActionResult GetFactory([FromQuery] int id)
         {
             Factory? factory;
             UserFactory userFactory = new();
@@ -34,16 +34,16 @@ namespace FactoryAPI.Controllers
 
             if (factory is null)
             {
-                throw new ArgumentNullException(nameof(factory), nameof(factory) + " cannot be null.");
+                return BadRequest("Предприятие не существует(");
             }
 
             userFactory = new(factory);
 
-            return userFactory;
+            return Ok(userFactory);
         }
 
         [HttpPost(Name = "PostFactory")]
-        public void PostFactory(string name, string description, string phone, string picture, [FromQuery] int[]? services, [FromQuery] List<int>? employee_id)
+        public IActionResult PostFactory(string name, string description, string phone, string picture, [FromQuery] int[]? services, [FromQuery] List<int>? employee_id)
         {
             if (RegexValidator.IsValidCompanyName(name) && RegexValidator.IsValidPhone_number(phone))
             {
@@ -53,7 +53,7 @@ namespace FactoryAPI.Controllers
                     foreach (int Id in services)
                     {
                         if (_context.Service.Find(Id) is null)
-                            throw new ArgumentOutOfRangeException(nameof(Id), "Some services are not in the Database");
+                            return BadRequest("Некоторые сервисы не зарегистрированы");
                     }
                 }
 
@@ -62,7 +62,7 @@ namespace FactoryAPI.Controllers
                     foreach (int Id in employee_id)
                     {
                         if (_context.Employee.Find(Id) is null)
-                            throw new ArgumentOutOfRangeException(nameof(Id), "Some employees are not in the Database");
+                            return BadRequest("Некоторые работники не заригистрированы");
                     }
                 }
 
@@ -72,23 +72,24 @@ namespace FactoryAPI.Controllers
             }
             else
             {
-                throw new ArgumentException("Company name or phone number is wrong");
+                return BadRequest("Название придприятия или номер телефона не корректны(");
             }
+            return Ok("Предприятие зарегистрировано");
         }
 
         [HttpPut(Name = "AddEmployee")]
-        public void PutEmployee(int employee_id, int factory_id)
+        public IActionResult PutEmployee(int employee_id, int factory_id)
         {
             if (_context.Employee.Find(employee_id) is null)
             {
-                throw new ArgumentException("this employee doesn't exist");
+                return BadRequest("Данный работник не зарегистрирован");
             }
 
             var factory = _context.Factory.Find(factory_id);
 
             if (factory is null)
             {
-                throw new ArgumentException("this Factory doesn't exist");
+                return BadRequest("Придприятие не зарегистрировано (");
             }
 
             
@@ -99,10 +100,11 @@ namespace FactoryAPI.Controllers
             }
 
             if (factory.Employee_id.Contains(employee_id))
-                return;
+                return Ok();
 
             factory.Employee_id.Add(employee_id);
             _context.SaveChanges();
+            return Ok("Изменения успешно проведены");
         }
     }
 
