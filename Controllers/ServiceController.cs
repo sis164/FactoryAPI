@@ -1,4 +1,5 @@
 ﻿using FactoryAPI.Models;
+using FactoryAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FactoryAPI.Controllers
@@ -24,16 +25,27 @@ namespace FactoryAPI.Controllers
             {
                 return BadRequest("Сервис не существует(");
             }
-
-            return Ok(service);
+            UserService userService = new(service);
+            return Ok(userService);
         }
 
         [HttpPost(Name = "PostService")]
-        public void PostService(string name, string description, double cost)
+        public void PostService([FromBody] RequestService requestService)
         {
-            Service service = new(name,description, cost);
+            var name = requestService.Name;
+            var description = requestService.Description;
+            var cost = requestService.Cost;
+            var pictures = requestService.Pictures;
+            Service service = new(name,description, cost, PictureConverter.SaveImageGetPath(pictures, name + "Service"));
             _context.Service.Add(service);
             _context.SaveChanges();
         }
+    }
+    public class RequestService
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public double Cost { get; set; }
+        public string[] Pictures { get; set; }
     }
 }

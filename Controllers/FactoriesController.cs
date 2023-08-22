@@ -45,7 +45,7 @@ namespace FactoryAPI.Controllers
 
             if (RegexValidator.IsValidCompanyName(name) && RegexValidator.IsValidPhone_number(phone))
             { 
-                Factory factory = new() { Name = name, Description = description, Phone_number = phone, Picture = PictureConverter.SaveImageGetPath(pictures, name) };
+                Factory factory = new() { Name = name, Description = description, Phone_number = phone, Picture = PictureConverter.SaveImageGetPath(pictures, name + "Factory") };
                 _context.Factory.Add(factory);
                 _context.SaveChanges();
             }
