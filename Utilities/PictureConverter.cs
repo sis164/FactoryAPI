@@ -1,9 +1,6 @@
-﻿using FactoryAPI.Models;
-using System.Linq;
-
-namespace FactoryAPI.Utilities
+﻿namespace FactoryAPI.Utilities
 {
-    public class PictureConverter
+    static public class PictureConverter
     {
         static public string SaveImageGetPath(string[] Base64Images, string name)
         {

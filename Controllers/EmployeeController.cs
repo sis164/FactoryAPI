@@ -1,9 +1,6 @@
 ﻿using FactoryAPI.Models;
 using FactoryAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 
 namespace FactoryAPI.Controllers
 {

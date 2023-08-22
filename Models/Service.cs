@@ -1,6 +1,4 @@
-﻿using Npgsql.Internal.TypeHandlers.NumericHandlers;
-
-namespace FactoryAPI.Models
+﻿namespace FactoryAPI.Models
 {
     public class Service
     {

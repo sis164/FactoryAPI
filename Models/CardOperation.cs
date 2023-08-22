@@ -1,6 +1,4 @@
-﻿using Npgsql.Internal.TypeHandlers.DateTimeHandlers;
-
-namespace FactoryAPI.Models
+﻿namespace FactoryAPI.Models
 {
     public class CardOperation
     {

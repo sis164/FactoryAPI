@@ -1,7 +1,6 @@
 ﻿using FactoryAPI.Models;
 using FactoryAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml.Linq;
 
 namespace FactoryAPI.Controllers
 {

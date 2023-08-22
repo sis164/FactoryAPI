@@ -1,7 +1,5 @@
 ﻿using FactoryAPI.Models;
-using FactoryAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
-using Npgsql.Internal.TypeHandlers.NumericHandlers;
 
 namespace FactoryAPI.Controllers
 {
