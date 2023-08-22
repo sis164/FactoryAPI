@@ -60,7 +60,7 @@ namespace FactoryAPI
                     // будет ли валидироваться время существования
                     ValidateLifetime = true,
                     // валидатор времени жизни
-                    LifetimeValidator = CustomLifetimeValidator,
+                    LifetimeValidator = TokenGenerator.CustomLifetimeValidator,
                     // установка ключа безопасности
                     IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                     // валидация ключа безопасности
@@ -91,13 +91,6 @@ namespace FactoryAPI
 
 
         }
-        static private bool CustomLifetimeValidator(DateTime? notBefore, DateTime? expires, SecurityToken tokenToValidate, TokenValidationParameters @param)
-        {
-            if (expires != null)
-            {
-                return expires > DateTime.UtcNow;
-            }
-            return false;
-        }
+        
     }
 }
