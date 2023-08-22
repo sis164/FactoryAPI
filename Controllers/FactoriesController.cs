@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FactoryAPI.Models;
 using FactoryAPI.Utilities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Drawing;
 
 namespace FactoryAPI.Controllers
 {
@@ -33,8 +36,13 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpPost(Name = "PostFactory")]
-        public IActionResult PostFactory(string name, string description, string phone, [FromBody] string[] pictures)
+        public IActionResult PostFactory([FromBody] RequestFactory requestFactory)
         {
+            var name = requestFactory.Name;
+            var phone = requestFactory.Phone_number;
+            var description = requestFactory.Description;
+            var pictures = requestFactory.Pictures;
+
             if (RegexValidator.IsValidCompanyName(name) && RegexValidator.IsValidPhone_number(phone))
             { 
                 Factory factory = new() { Name = name, Description = description, Phone_number = phone, Picture = PictureConverter.SaveImageGetPath(pictures, name) };
@@ -79,5 +87,11 @@ namespace FactoryAPI.Controllers
         }
     }
 
-
+    public class RequestFactory
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Phone_number { get; set;}
+        public string[] Pictures { get; set; }
+    }
 }

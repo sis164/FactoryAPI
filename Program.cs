@@ -59,7 +59,7 @@ namespace FactoryAPI
                     ValidAudience = AuthOptions.AUDIENCE,
                     // будет ли валидироваться время существования
                     ValidateLifetime = true,
-                    
+                    // валидатор времени жизни
                     LifetimeValidator = CustomLifetimeValidator,
                     // установка ключа безопасности
                     IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
