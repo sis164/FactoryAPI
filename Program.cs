@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using FactoryAPI.Utilities;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace FactoryAPI
 {
@@ -46,6 +47,7 @@ namespace FactoryAPI
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
+
                     // укзывает, будет ли валидироваться издатель при валидации токена(SSL)
                     ValidateIssuer = true,
                     // строка, представляющая издателя
@@ -57,7 +59,8 @@ namespace FactoryAPI
                     ValidAudience = AuthOptions.AUDIENCE,
                     // будет ли валидироваться время существования
                     ValidateLifetime = true,
-
+                    
+                    LifetimeValidator = CustomLifetimeValidator,
                     // установка ключа безопасности
                     IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                     // валидация ключа безопасности
@@ -87,6 +90,14 @@ namespace FactoryAPI
             app.Run();
 
 
+        }
+        static private bool CustomLifetimeValidator(DateTime? notBefore, DateTime? expires, SecurityToken tokenToValidate, TokenValidationParameters @param)
+        {
+            if (expires != null)
+            {
+                return expires > DateTime.UtcNow;
+            }
+            return false;
         }
     }
 }
