@@ -78,7 +78,7 @@ namespace FactoryAPI.Controllers
                 return BadRequest("Invalid refresh token");
             }
 
-            var principal = TokenGenerator.GetPrincipalFromExpiredToken(accessToken);
+            var principal = TokenDecoder.GetPrincipalFromExpiredToken(accessToken);
 
             if (principal == null || principal.Identity == null || principal.Identity.Name == null)
             {

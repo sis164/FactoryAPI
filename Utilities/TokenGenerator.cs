@@ -14,7 +14,7 @@ namespace FactoryAPI.Utilities
             var jwt = new JwtSecurityToken( // Access token
                     issuer: AuthOptions.ISSUER,
                     audience: AuthOptions.AUDIENCE,
-            notBefore: DateTime.UtcNow,
+                    notBefore: DateTime.UtcNow,
                     claims: identity.Claims,
                     expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
@@ -27,7 +27,7 @@ namespace FactoryAPI.Utilities
             var token = new JwtSecurityToken( // Access token
                     issuer: AuthOptions.ISSUER,
                     audience: AuthOptions.AUDIENCE,
-            notBefore: DateTime.UtcNow,
+                    notBefore: DateTime.UtcNow,
                     claims: authClaims,
                     expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
@@ -61,28 +61,6 @@ namespace FactoryAPI.Utilities
                 return expires > DateTime.UtcNow;
             }
             return false;
-        }
-
-        static public ClaimsPrincipal? GetPrincipalFromExpiredToken(string? token)
-        {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidIssuer = AuthOptions.ISSUER,
-                ValidateAudience = true,
-                ValidAudience = AuthOptions.AUDIENCE,
-                ValidateLifetime = false,
-                IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                ValidateIssuerSigningKey = true,
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-            if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("Invalid token");
-
-            return principal;
-
         }
     }
 }

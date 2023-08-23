@@ -47,5 +47,10 @@ namespace FactoryAPI.Utilities
 
             return result;
         }
+        public static int GenerateNumericCode()
+        {
+            Random random = new();
+            return random.Next(1000, 9999);
+        }
     }
 }

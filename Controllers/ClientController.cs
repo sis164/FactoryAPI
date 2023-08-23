@@ -1,4 +1,5 @@
-﻿using FactoryAPI.Models;
+﻿using FactoryAPI.Models.RequestBodies;
+using FactoryAPI.Models;
 using FactoryAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,20 +53,6 @@ namespace FactoryAPI.Controllers
             _context.SaveChanges();
 
             return Ok(client);
-        }
-    }
-
-    public class RequestClient
-    {
-        public string FirstName { get; set; }
-        public string SecondName { get; set; }
-        public string Patronym { get; set; }
-
-        public RequestClient(string firstName, string secondName, string patronym)
-        {
-            FirstName = firstName;
-            SecondName = secondName;
-            Patronym = patronym;
         }
     }
 }
