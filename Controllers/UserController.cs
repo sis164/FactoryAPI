@@ -1,4 +1,5 @@
-﻿using FactoryAPI.Models;
+﻿using FactoryAPI.Models.RequestBodies;
+using FactoryAPI.Models;
 using FactoryAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,24 +31,16 @@ namespace FactoryAPI.Controllers
             {
                 return BadRequest("Пользователь с таким номером телефона уже существует.");
             }
+            if (requestUser.HashCode != HashFunction.GetHashPassword(requestUser.Code.ToString()))
+            {
+                return BadRequest("Не подтверждён номер телефона.");
+            }
 
             User user = new(requestUser.Login, HashFunction.GetHashPassword(requestUser.Password), requestUser.Phone_number);
             _context.User.Add(user);
             _context.SaveChanges();
 
             return Ok("Пользователь зарегистрирован.");
-        }
-    }
-    public class RequestUser
-    {
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Phone_number { get; set; }
-        public RequestUser(string login, string password, string phone_number)
-        {
-            Login = login;
-            Password = password;
-            Phone_number = phone_number;
         }
     }
 }

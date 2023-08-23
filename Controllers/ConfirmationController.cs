@@ -17,43 +17,33 @@ namespace FactoryAPI.Controllers
             _context = context;
         }
 
-        [Authorize]
+
         [HttpGet]
-        public IActionResult GetConfirmationCode([FromHeader] string Authorization)
+        public IActionResult GetConfirmationCode()
         {
-            int id = TokenDecoder.GetIdFromToken(Authorization);
-            var user = _context.User.Find(id);
-
-            if (user is null)
-            {
-                return BadRequest("Wrong Access Token");
-            }
-
-            user.ConfirmationCode = CodeGenerator.GenerateNumericCode();
-            _context.SaveChanges();
-
-            return Ok(user.ConfirmationCode);
+            int code = CodeGenerator.GenerateNumericCode();
+            return Ok(code + " " + HashFunction.GetHashPassword(code.ToString()));
         }
 
-        [Authorize]
-        [HttpPost]
-        public IActionResult PostConfirmationCode([FromHeader] string Authorization, [FromBody] int code)
-        {
-            int id = TokenDecoder.GetIdFromToken(Authorization);
-            var user = _context.User.Find(id);
-            if (user is null)
-            {
-                return BadRequest("Wrong Access Token");
-            }
+        //[Authorize]
+        //[HttpPost]
+        //public IActionResult PostConfirmationCode([FromHeader] string Authorization, [FromBody] int code)
+        //{
+        //    int id = TokenDecoder.GetIdFromToken(Authorization);
+        //    var user = _context.User.Find(id);
+        //    if (user is null)
+        //    {
+        //        return BadRequest("Wrong Access Token");
+        //    }
 
-            if (user.ConfirmationCode == code)
-            {
-                return Ok("Подтверждено успешно.");
-            }
-            else
-            {
-                return BadRequest("Код не совпадает.");
-            }
-        }
+        //    if (user.ConfirmationCode == code)
+        //    {
+        //        return Ok("Подтверждено успешно.");
+        //    }
+        //    else
+        //    {
+        //        return BadRequest("Код не совпадает.");
+        //    }
+        //}
     }
 }
