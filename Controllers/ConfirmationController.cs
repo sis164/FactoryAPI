@@ -3,6 +3,7 @@ using FactoryAPI.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Protocol;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace FactoryAPI.Controllers
@@ -11,18 +12,17 @@ namespace FactoryAPI.Controllers
     [Route("/[controller]")]
     public class ConfirmationController : Controller
     {
-        private readonly ApplicationContext _context;
-        public ConfirmationController(ApplicationContext context)
-        {
-            _context = context;
-        }
-
 
         [HttpGet]
         public IActionResult GetConfirmationCode()
         {
             int code = CodeGenerator.GenerateNumericCode();
-            return Ok(code + " " + HashFunction.GetHashPassword(code.ToString()));
+            Dictionary<string, string> result = new()
+            {
+                { "code", code.ToString() },
+                { "hashed code", HashFunction.GetHashPassword(code.ToString()) }
+            };
+            return Ok(result.ToJson());
         }
 
         //[Authorize]
