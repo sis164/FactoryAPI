@@ -1,5 +1,6 @@
 ﻿using FactoryAPI.Models;
 using FactoryAPI.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FactoryAPI.Controllers
@@ -15,6 +16,8 @@ namespace FactoryAPI.Controllers
             _context = context;
         }
 
+
+        [Authorize]
         [HttpGet(Name = "GetService")]
         public IActionResult GetService(int id)
         {
@@ -29,6 +32,7 @@ namespace FactoryAPI.Controllers
             return Ok(userService);
         }
 
+        [Authorize]
         [HttpPost(Name = "PostService")]
         public IActionResult PostService([FromBody] RequestService requestService)
         {

@@ -1,5 +1,6 @@
 ﻿using FactoryAPI.Models;
 using FactoryAPI.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FactoryAPI.Controllers
@@ -14,6 +15,7 @@ namespace FactoryAPI.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet(Name = "GetEmployee")]
         public IActionResult GetEmployee(int Id)
         {
@@ -26,6 +28,7 @@ namespace FactoryAPI.Controllers
             return Ok(employee);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult PostEmployee([FromBody] RequestEmployee requestEmployee)
         {

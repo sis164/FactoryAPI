@@ -4,6 +4,7 @@ using FactoryAPI.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Drawing;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FactoryAPI.Controllers
 {
@@ -18,6 +19,7 @@ namespace FactoryAPI.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet(Name = "GetFactory")]
         public IActionResult GetFactory([FromQuery] int id)
         {
@@ -33,6 +35,7 @@ namespace FactoryAPI.Controllers
             return Ok(userFactory);
         }
 
+        [Authorize]
         [HttpPost(Name = "PostFactory")]
         public IActionResult PostFactory([FromBody] RequestFactory requestFactory)
         {
@@ -55,6 +58,7 @@ namespace FactoryAPI.Controllers
             return Ok("Предприятие зарегистрировано");
         }
 
+        [Authorize]
         [HttpPut(Name = "AddEmployee")]
         public IActionResult PutEmployee(int employee_id, int factory_id)
         {

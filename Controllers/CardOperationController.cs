@@ -1,4 +1,5 @@
 ﻿using FactoryAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FactoryAPI.Controllers
@@ -12,7 +13,7 @@ namespace FactoryAPI.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         [HttpGet]
         public IActionResult GetCardOperation(int id)
         {
@@ -26,6 +27,7 @@ namespace FactoryAPI.Controllers
             return Ok(cardOperation);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult PostCardOperation([FromBody] RequestCardOperation requestCardOperation)
         {

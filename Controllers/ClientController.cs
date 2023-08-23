@@ -1,5 +1,6 @@
 ﻿using FactoryAPI.Models;
 using FactoryAPI.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FactoryAPI.Controllers
@@ -15,6 +16,7 @@ namespace FactoryAPI.Controllers
             _context = context;
         }
 
+        [Authorize]
         [HttpGet(Name = "GetClient")]
         public IActionResult GetClient(int id)
         {
@@ -28,6 +30,7 @@ namespace FactoryAPI.Controllers
             return Ok(client);
         }
 
+        [Authorize]
         [HttpPost(Name = "PostClient")]
         public IActionResult PostClient([FromBody] RequestClient requestClient)
         {
