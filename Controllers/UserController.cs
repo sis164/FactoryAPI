@@ -16,13 +16,13 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostUser([FromBody]RequestUser requestUser)
+        public IActionResult PostUser([FromBody] RequestUser requestUser)
         {
             if (!RegexValidator.IsValidLogin(requestUser.Login))
             {
                 return BadRequest("Логин пользователя не корректен.");
             }
-            if(!RegexValidator.IsValidPhone_number(requestUser.Phone_number))
+            if (!RegexValidator.IsValidPhone_number(requestUser.Phone_number))
             {
                 return BadRequest("Номер телефона не корректен.");
             }
@@ -31,7 +31,7 @@ namespace FactoryAPI.Controllers
                 return BadRequest("Пользователь с таким номером телефона уже существует.");
             }
 
-            User user = new(requestUser.Login, HashFunction.GetHashPassword(requestUser.Password),requestUser.Phone_number);
+            User user = new(requestUser.Login, HashFunction.GetHashPassword(requestUser.Password), requestUser.Phone_number);
             _context.User.Add(user);
             _context.SaveChanges();
 

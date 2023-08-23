@@ -29,7 +29,7 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpPost(Name = "PostClient")]
-        public IActionResult PostClient([FromBody]RequestClient requestClient)
+        public IActionResult PostClient([FromBody] RequestClient requestClient)
         {
             if (!RegexValidator.IsValidName(requestClient.FirstName))
             {

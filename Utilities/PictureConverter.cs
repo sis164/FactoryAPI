@@ -6,12 +6,12 @@
         {
             string folderName = "\\pictures\\" + name;
             var directory = Directory.CreateDirectory(Directory.GetCurrentDirectory() + folderName);
-            foreach (var Base64Image in Base64Images) 
+            foreach (var Base64Image in Base64Images)
             {
                 byte[] bytes = Convert.FromBase64String(Base64Image);
-                string path = UpdatePath(name,directory);
+                string path = UpdatePath(name, directory);
                 System.IO.File.WriteAllBytes(path, bytes);
-                
+
             }
             return directory.FullName;
         }
@@ -40,7 +40,7 @@
         {
             DirectoryInfo directory = new DirectoryInfo(path);
             var files = directory.GetFiles();
-            List<byte[]> result = new List<byte[]>(); 
+            List<byte[]> result = new List<byte[]>();
             foreach (var file in files)
             {
                 result.Add(File.ReadAllBytes(file.FullName));

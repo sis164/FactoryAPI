@@ -95,7 +95,7 @@ namespace FactoryAPI.Controllers
 
             DateTime refreshTokenExpirationDate = DateDecoder.DecodeExpirationDate(refreshToken[..6]);
 
-            if(refreshTokenExpirationDate <= DateTime.Now)
+            if (refreshTokenExpirationDate <= DateTime.Now)
             {
                 return BadRequest("Refresh token is expired");
             }

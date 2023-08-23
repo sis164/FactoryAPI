@@ -33,6 +33,6 @@ namespace FactoryAPI.Utilities
             return regex.IsMatch(mail);
         }
 
-       
+
     }
 }
