@@ -39,8 +39,7 @@ namespace FactoryAPI.Utilities
         public static string GenerateRefreshToken(JwtSecurityToken token)
         {
             //+ time
-            //DateTime expirationDate = DateTime.Now.AddDays(30);
-            DateTime expirationDate = DateTime.Now.AddMinutes(2);
+            DateTime expirationDate = DateTime.Now.AddDays(30);
             StringBuilder sb = new StringBuilder();
             sb.Append(DateDecoder.EncodeExpirationDate(expirationDate));
             //+ random part
