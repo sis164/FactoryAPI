@@ -32,7 +32,5 @@ namespace FactoryAPI.Utilities
             Regex regex = new("^\\w+[-+\\.\\w]*[\\w]@[a-z]+[\\.][a-z]{2,3}$");
             return regex.IsMatch(mail);
         }
-
-
     }
 }

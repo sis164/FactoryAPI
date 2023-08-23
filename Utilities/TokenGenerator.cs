@@ -62,7 +62,5 @@ namespace FactoryAPI.Utilities
             }
             return false;
         }
-
-        
     }
 }
