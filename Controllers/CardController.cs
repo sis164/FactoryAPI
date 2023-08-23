@@ -14,11 +14,10 @@ namespace FactoryAPI.Controllers
             _context = context;
         }
 
-        [HttpGet(Name = "GetCard")]
+        [HttpGet]
         public IActionResult GetCard(int id)
         {
-            Card? card;
-            card = _context.Card.Find(id);
+            var card = _context.Card.Find(id);
 
             if (card is null)
             {
@@ -28,10 +27,9 @@ namespace FactoryAPI.Controllers
             return Ok(card);
         }
 
-        [HttpPost(Name = "PostCard")]
+        [HttpPost]
         public IActionResult PostCard(int Client_id)
         {
-
             if (_context.Client.Find(Client_id) is null)
             {
                 return BadRequest("Клиент с таким id не существует.");

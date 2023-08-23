@@ -21,13 +21,11 @@ namespace FactoryAPI.Controllers
         [HttpGet(Name = "GetFactory")]
         public IActionResult GetFactory([FromQuery] int id)
         {
-            Factory? factory;
-
-            factory = _context.Factory.Find(id);
+            var factory = _context.Factory.Find(id);
 
             if (factory is null)
             {
-                return BadRequest("Предприятие не существует(");
+                return BadRequest("Предприятие с таким id не существует.");
             }
 
             UserFactory userFactory = new(factory);
@@ -38,14 +36,15 @@ namespace FactoryAPI.Controllers
         [HttpPost(Name = "PostFactory")]
         public IActionResult PostFactory([FromBody] RequestFactory requestFactory)
         {
-            var name = requestFactory.Name;
-            var phone = requestFactory.Phone_number;
-            var description = requestFactory.Description;
-            var pictures = requestFactory.Pictures;
-
-            if (RegexValidator.IsValidCompanyName(name) && RegexValidator.IsValidPhone_number(phone))
-            { 
-                Factory factory = new() { Name = name, Description = description, Phone_number = phone, Picture = PictureConverter.SaveImageGetPath(pictures, name + "Factory") };
+            if (RegexValidator.IsValidCompanyName(requestFactory.Name) && RegexValidator.IsValidPhone_number(requestFactory.Phone_number))
+            {
+                Factory factory = new()
+                {
+                    Name = requestFactory.Name,
+                    Description = requestFactory.Description, 
+                    Phone_number = requestFactory.Phone_number, 
+                    Picture = PictureConverter.SaveImageGetPath(requestFactory.Pictures, requestFactory.Name + "Factory")
+                };
                 _context.Factory.Add(factory);
                 _context.SaveChanges();
             }
@@ -71,12 +70,7 @@ namespace FactoryAPI.Controllers
                 return BadRequest("Придприятие не зарегистрировано (");
             }
 
-            
-
-            if (factory.Employee_id is null)
-            {
-                factory.Employee_id = new List<int>();
-            }
+            factory.Employee_id ??= new List<int>();
 
             if (factory.Employee_id.Contains(employee_id))
                 return Ok();
@@ -91,7 +85,14 @@ namespace FactoryAPI.Controllers
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Phone_number { get; set;}
+        public string Phone_number { get; set; }
         public string[] Pictures { get; set; }
+        public RequestFactory(string name, string description, string phone_number, string[] pictures)
+        {
+            Name = name;
+            Description = description;
+            Phone_number = phone_number;
+            Pictures = pictures;
+        }
     }
 }

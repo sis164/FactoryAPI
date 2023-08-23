@@ -18,8 +18,7 @@ namespace FactoryAPI.Controllers
         [HttpGet(Name = "GetClient")]
         public IActionResult GetClient(int id)
         {
-            Client? client;
-            client = _context.Client.Find(id);
+            var client = _context.Client.Find(id);
 
             if (client is null)
             {
@@ -30,26 +29,40 @@ namespace FactoryAPI.Controllers
         }
 
         [HttpPost(Name = "PostClient")]
-        public IActionResult PostClient(string First_name, string Second_name, string Patronym)
+        public IActionResult PostClient([FromBody]RequestClient requestClient)
         {
-            if (!RegexValidator.IsValidName(First_name))
+            if (!RegexValidator.IsValidName(requestClient.FirstName))
             {
                 return BadRequest("Имя пользователя не верно.");
             }
-            if (!RegexValidator.IsValidName(Second_name))
+            if (!RegexValidator.IsValidName(requestClient.SecondName))
             {
                 return BadRequest("Фамилия пользователя не верна.");
             }
-            if (!RegexValidator.IsValidName(Patronym))
+            if (!RegexValidator.IsValidName(requestClient.Patronym))
             {
                 return BadRequest("Отчество пользователя не верно.");
             }
 
-            Client client = new(First_name, Second_name, Patronym);
+            Client client = new(requestClient.FirstName, requestClient.SecondName, requestClient.Patronym);
             _context.Client.Add(client);
             _context.SaveChanges();
 
             return Ok(client);
+        }
+    }
+
+    public class RequestClient
+    {
+        public string FirstName { get; set; }
+        public string SecondName { get; set; }
+        public string Patronym { get; set; }
+
+        public RequestClient(string firstName, string secondName, string patronym)
+        {
+            FirstName = firstName;
+            SecondName = secondName;
+            Patronym = patronym;
         }
     }
 }

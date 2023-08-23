@@ -81,16 +81,16 @@ namespace FactoryAPI
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers(); 
+                endpoints.MapControllers();
             });
             app.UseHttpsRedirection();
 
-            app.MapGet("/", () => "hello world");
+            app.MapGet("/", () => "Successfully connected to FactoryAPI!");
 
             app.Run();
 
 
         }
-        
+
     }
 }

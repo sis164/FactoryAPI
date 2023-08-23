@@ -17,8 +17,7 @@ namespace FactoryAPI.Controllers
         [HttpGet(Name = "GetEmployee")]
         public IActionResult GetEmployee(int Id)
         {
-            Employee? employee;
-            employee = _context.Employee.Find(Id);
+            var employee = _context.Employee.Find(Id);
 
             if (employee == null)
             {
@@ -27,50 +26,65 @@ namespace FactoryAPI.Controllers
             return Ok(employee);
         }
 
-        [HttpPost(Name = "PostEmployee")]
-        public IActionResult PostEmployee([FromQuery] int[] factory_id, string first_name, string second_name, string patronym, string specialization)
+        [HttpPost]
+        public IActionResult PostEmployee([FromBody] RequestEmployee requestEmployee)
         {
-
-            if (!RegexValidator.IsValidName(first_name))
+            if (!RegexValidator.IsValidName(requestEmployee.First_name))
             {
                 return BadRequest("Имя пользователя не верно.");
             }
-            if (!RegexValidator.IsValidName(second_name))
+            if (!RegexValidator.IsValidName(requestEmployee.Second_name))
             {
                 return BadRequest("Фамилия пользователя не верна.");
             }
-            if (!RegexValidator.IsValidName(patronym))
+            if (!RegexValidator.IsValidName(requestEmployee.Patronym))
             {
                 return BadRequest("Отчество пользователя не верно.");
             }
 
-            if (RegexValidator.IsValidName(first_name) && RegexValidator.IsValidName(second_name) && RegexValidator.IsValidName(patronym))
+
+            if (requestEmployee.FactoryId is null)
             {
-                if (factory_id is null)
-                {
-                    return BadRequest("Предприятие не найдено");
-                }
-
-                foreach (int factroryId in factory_id)
-                {
-                    if (_context.Factory.Find(factroryId) == null)
-                        return BadRequest("Некоторые предприятия не в зарегистрированы");
-                }
-
-
-                Employee employee = new()
-                {
-                    Factorys_id = factory_id,
-                    First_name = first_name,
-                    Second_name = second_name,
-                    Patronym = patronym,
-                    Specialization = specialization,
-                };
-                _context.Employee.Add(employee);
-                _context.SaveChanges();
+                return BadRequest("Предприятие не найдено");
             }
+
+            foreach (int factoryId in requestEmployee.FactoryId)
+            {
+                if (_context.Factory.Find(factoryId) == null)
+                    return BadRequest("Некоторые предприятия не в зарегистрированы");
+            }
+
+            Employee employee = new Employee()
+            {
+                Factorys_id = requestEmployee.FactoryId,
+                First_name = requestEmployee.First_name,
+                Second_name = requestEmployee.Second_name,
+                Patronym = requestEmployee.Patronym,
+                Specialization = requestEmployee.Specialization,
+            };
+
+            _context.Employee.Add(employee);
+            _context.SaveChanges();
+
             return Ok("Работник успешно зарегистрирован");
         }
+    }
 
+    public class RequestEmployee
+    {
+        public int[] FactoryId { get; set; }
+        public string First_name { get; set; }
+        public string Second_name { get; set; }
+        public string Patronym { get; set; }
+        public string Specialization { get; set; }
+        public RequestEmployee(int[] factoryId, string first_name, string second_name, string patronym, string specialization)
+        {
+            FactoryId = factoryId;
+            First_name = first_name;
+            Second_name = second_name;
+            Patronym = patronym;
+            Specialization = specialization;
+        }
     }
 }
+

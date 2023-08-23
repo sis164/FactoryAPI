@@ -80,7 +80,7 @@ namespace FactoryAPI.Controllers
 
             var principal = TokenGenerator.GetPrincipalFromExpiredToken(accessToken);
 
-            if (principal == null)
+            if (principal == null || principal.Identity == null || principal.Identity.Name == null)
             {
                 return BadRequest("Invalid access token");
             }
@@ -88,12 +88,19 @@ namespace FactoryAPI.Controllers
             string username = principal.Identity.Name;
 
             var user = _context.User.FirstOrDefault(x => x.Login == username);
-            if (user == null || user.jwtRefresh != refreshToken || DateDecoder.DecodeExpirationDate(refreshToken[..6]) <= DateTime.Now)
+            if (user == null || user.jwtRefresh != refreshToken)
             {
                 return BadRequest("Invalid refresh token");
             }
 
-            var newAccessToken = TokenGenerator.CreateToken(principal.Claims.ToList());
+            DateTime refreshTokenExpirationDate = DateDecoder.DecodeExpirationDate(refreshToken[..6]);
+
+            if(refreshTokenExpirationDate <= DateTime.Now)
+            {
+                return BadRequest("Refresh token is expired");
+            }
+
+            var newAccessToken = TokenGenerator.GenerateAccessToken(principal.Claims.ToList());
             var newRefreshToken = TokenGenerator.GenerateRefreshToken(newAccessToken);
 
             user.jwtRefresh = newRefreshToken;

@@ -8,54 +8,72 @@ namespace FactoryAPI.Utilities
     {
         public static string EncodeExpirationDate(DateTime expirationDate)
         {
-            // Extract the components from the expiration date
-            int year = expirationDate.Year % 100; // Considering the last two digits of the year
+            int year = expirationDate.Year;
             int month = expirationDate.Month;
             int day = expirationDate.Day;
             int hour = expirationDate.Hour;
             int minute = expirationDate.Minute;
 
-            // Encode the date using the same logic
             uint date = (uint)((year << 20) | (month << 16) | (day << 11) | (hour << 6) | minute);
 
-            StringBuilder sBuilder = new StringBuilder();
 
+            StringBuilder stringBuilder = new StringBuilder();
+            int i = 25;
             for (int n = 0; n < 6; n++)
             {
-                byte b6Bit = (byte)((date >> (n * 6)) & 0x3F);
-                sBuilder.Append(AsciiToByte8bit(b6Bit));
+                byte b6Bit = (byte)((date >> i) & 0x3F);
+                stringBuilder.Append(Byte8BitToASCII(b6Bit));
+
+                i -= 6;
+                if (i < 0)
+                {
+                    i = 0;
+                }
             }
 
-            return sBuilder.ToString();
-        }
-
-        // Helper method to convert a 6-bit value to an ASCII character
-        public static char AsciiToByte8bit(byte value)
-        {
-            // ASCII characters 0x20 to 0x5F represent printable characters
-            return (char)(value + 0x20);
+            return stringBuilder.ToString();
         }
 
         static public DateTime DecodeExpirationDate(string encodedDate)
         {
-            if (encodedDate.Length != 6)
+            uint timeBitArray = 0;
+            int i = 25;
+
+            for (int n = 0; n < 6; n++)
             {
-                throw new ArgumentException("Закодированная строка имеет неверную длину");
+                byte b8Bit = FromASCIIToByte((byte)encodedDate[n]);
+                timeBitArray |= (uint)b8Bit << i;
+
+                i -= 6;
+                if (i < 0)
+                {
+                    i = 0;
+                }
             }
 
-            int year = 2000 + int.Parse(encodedDate.Substring(0, 2));
-            int month = int.Parse(encodedDate.Substring(2, 2));
-            int day = int.Parse(encodedDate.Substring(4, 2));
-            int hour = int.Parse(encodedDate.Substring(6, 2));
-            int minute = int.Parse(encodedDate.Substring(8, 2));
+            int year = (int)((timeBitArray >> 20) & 0x0FFF);
+            int month = (int)((timeBitArray >> 16) & 0x0F);
+            int day = (int)((timeBitArray >> 11) & 0x1F);
+            int hour = (int)((timeBitArray >> 6) & 0x1F);
+            int minute = (int)(timeBitArray & 0x3F);
 
-            return new DateTime(year, month, day, hour, minute, 0);
+            return new DateTime(year, month, day, hour, minute, 0, DateTimeKind.Utc);
         }
-
-        // Helper method to convert an ASCII character to 6-bit value
-        static byte Byte8bitToAscii(char ch)
+        private static byte FromASCIIToByte(byte b)
         {
-            return (byte)(ch - 0x20);
+            if (b > 63)
+            {
+                b -= 64;
+            }
+            return b;
+        }
+        private static char Byte8BitToASCII(byte b)
+        {
+            if (b < 32)
+            {
+                b += 64;
+            }
+            return (char)b;
         }
     }
 }

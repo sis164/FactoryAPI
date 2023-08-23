@@ -23,22 +23,19 @@ namespace FactoryAPI.Controllers
 
             if (service is null)
             {
-                return BadRequest("Сервис не существует(");
+                return BadRequest("Сервис с таким id не существует.");
             }
             UserService userService = new(service);
             return Ok(userService);
         }
 
         [HttpPost(Name = "PostService")]
-        public void PostService([FromBody] RequestService requestService)
+        public IActionResult PostService([FromBody] RequestService requestService)
         {
-            var name = requestService.Name;
-            var description = requestService.Description;
-            var cost = requestService.Cost;
-            var pictures = requestService.Pictures;
-            Service service = new(name,description, cost, PictureConverter.SaveImageGetPath(pictures, name + "Service"));
+            Service service = new(requestService.Name, requestService.Description, requestService.Cost, PictureConverter.SaveImageGetPath(requestService.Pictures, requestService.Name + "Service"));
             _context.Service.Add(service);
             _context.SaveChanges();
+            return Ok("Сервис успешно зарегистрирован.");
         }
     }
     public class RequestService
@@ -47,5 +44,12 @@ namespace FactoryAPI.Controllers
         public string Description { get; set; }
         public double Cost { get; set; }
         public string[] Pictures { get; set; }
+        public RequestService(string name, string description, double cost, string[] pictures)
+        {
+            Name = name;
+            Description = description;
+            Cost = cost;
+            Pictures = pictures;
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace FactoryAPI.Utilities
             return jwt;
         }
 
-        public static JwtSecurityToken CreateToken(List<Claim> authClaims)
+        public static JwtSecurityToken GenerateAccessToken(List<Claim> authClaims)
         {
             var token = new JwtSecurityToken( // Access token
                     issuer: AuthOptions.ISSUER,
@@ -40,7 +40,7 @@ namespace FactoryAPI.Utilities
         {
             //+ time
             //DateTime expirationDate = DateTime.Now.AddDays(30);
-            DateTime expirationDate = DateTime.Now.AddMinutes(0.5);
+            DateTime expirationDate = DateTime.Now.AddMinutes(2);
             StringBuilder sb = new StringBuilder();
             sb.Append(DateDecoder.EncodeExpirationDate(expirationDate));
             //+ random part
@@ -50,7 +50,7 @@ namespace FactoryAPI.Utilities
             sb.Append(Convert.ToBase64String(randomNumber));
             //+ last 6 symbols of token
             string tokenName = new JwtSecurityTokenHandler().WriteToken(token).ToString();
-            sb.Append(tokenName.Substring(tokenName.Length - 6));
+            sb.Append(tokenName.AsSpan(tokenName.Length - 6));
 
             return sb.ToString();
         }
