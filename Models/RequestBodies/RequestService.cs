@@ -1,4 +1,6 @@
-﻿namespace FactoryAPI.Models.RequestBodies
+﻿using FactoryAPI.Utilities;
+
+namespace FactoryAPI.Models.RequestBodies
 {
     public class RequestService
     {
@@ -13,5 +15,13 @@
             Cost = cost;
             Pictures = pictures;
         }
+        public RequestService(Service service)
+        {
+            Name = service.Name;
+            Description = service.Description;
+            Cost = service.Cost;
+            Pictures = PictureConverter.ReadImageNotNull(service.Pictures);
+        }
+
     }
 }

@@ -29,8 +29,8 @@ namespace FactoryAPI.Controllers
             {
                 return BadRequest("Сервис с таким id не существует.");
             }
-            UserService userService = new(service);
-            return Ok(userService);
+            RequestService requestService = new(service);
+            return Ok(requestService);
         }
 
         [Authorize]

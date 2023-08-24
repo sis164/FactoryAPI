@@ -31,9 +31,9 @@ namespace FactoryAPI.Controllers
                 return BadRequest("Предприятие с таким id не существует.");
             }
 
-            UserFactory userFactory = new(factory);
+            RequestFactory requestFactory = new(factory);
 
-            return Ok(userFactory);
+            return Ok(requestFactory);
         }
 
         [Authorize]

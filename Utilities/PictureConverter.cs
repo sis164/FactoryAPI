@@ -1,4 +1,6 @@
-﻿namespace FactoryAPI.Utilities
+﻿using System.Runtime.CompilerServices;
+
+namespace FactoryAPI.Utilities
 {
     static public class PictureConverter
     {
@@ -36,16 +38,26 @@
             } while (System.IO.File.Exists(path));
             return path;
         }
-        static public List<byte[]> ReadImage(string path)
+        static public string[]? ReadImage(string? path)
+        {
+            if (path == null)
+            {
+                return null;
+            }
+            return ReadImageNotNull(path);
+        }
+        static public string[] ReadImageNotNull(string path)
         {
             DirectoryInfo directory = new DirectoryInfo(path);
             var files = directory.GetFiles();
-            List<byte[]> result = new List<byte[]>();
+            List<string> result = new List<string>();
             foreach (var file in files)
             {
-                result.Add(File.ReadAllBytes(file.FullName));
+                result.Add(Convert.ToBase64String(File.ReadAllBytes(file.FullName)));
             }
-            return result;
+            return result.ToArray();
         }
+
+
     }
 }

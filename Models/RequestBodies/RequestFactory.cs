@@ -1,4 +1,6 @@
-﻿namespace FactoryAPI.Models.RequestBodies
+﻿using FactoryAPI.Utilities;
+
+namespace FactoryAPI.Models.RequestBodies
 {
     public class RequestFactory
     {
@@ -12,6 +14,13 @@
             Description = description;
             Phone_number = phone_number;
             Pictures = pictures;
+        }
+        public RequestFactory (Factory factory)
+        {
+            Name = factory.Name;
+            Description = factory.Description;
+            Phone_number = factory.Phone_number;
+            Pictures = PictureConverter.ReadImageNotNull(factory.Picture);
         }
     }
 }
