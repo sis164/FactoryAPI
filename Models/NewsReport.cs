@@ -1,4 +1,6 @@
-﻿namespace FactoryAPI.Models
+﻿using System.Xml.Linq;
+
+namespace FactoryAPI.Models
 {
     public class NewsReport
     {
@@ -9,5 +11,12 @@
         public int Factory_Id { get; set; }
         public int Employee_Id { get; set; }
         public int Likes {get; set; }
+
+        public NewsReport()
+        {
+            Description = string.Empty;
+            Pictures = string.Empty;
+        }
+
     }
 }

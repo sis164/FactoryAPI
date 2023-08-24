@@ -11,6 +11,11 @@ namespace FactoryAPI.Models.RequestBodies
         public int Employee_Id { get; set; }
         public int Likes { get; set; }
 
+        public RequestNewsReport()
+        {
+
+        }
+
         public RequestNewsReport(string? description, string[]? pictures, int service_Id, int factory_Id, int employee_Id, int likes)
         {
             Description = description;

@@ -7,8 +7,6 @@
         public string Password { get; set; }
         public string Phone_number { get; set; }
         public string? jwtRefresh { get; set; }
-        public int? ConfirmationCode { get; set; }
-
         public User(string login, string password, string phone_number)
         {
             Login = login;

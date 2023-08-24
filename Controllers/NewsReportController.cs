@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Drawing;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FactoryAPI.Controllers
 {
@@ -24,7 +25,7 @@ namespace FactoryAPI.Controllers
         [HttpGet(Name = "GetNewsReport")]
         public IActionResult GetFactory([FromQuery] int id)
         {
-            var newsreport = _context.NewsReports.Find(id);
+            var newsreport = _context.NewsReport.Find(id);
 
             if (newsreport is null)
             {
@@ -44,26 +45,20 @@ namespace FactoryAPI.Controllers
             {
                 return BadRequest("Данные введены не корекктно");
             }
-            
+
             NewsReport newsreport = new()
             {
+                Factory_Id = requestReport.Factory_Id,
                 Service_Id = requestReport.Service_Id,
                 Employee_Id = requestReport.Employee_Id,
                 Description = requestReport.Description,
                 Likes = requestReport.Likes,
+                Pictures = (requestReport.Pictures is null) ? null : PictureConverter.SaveImageGetPath(requestReport.Pictures, _context.Factory.Find(requestReport.Factory_Id)!.Name + "NewsReport")
             };
-            if (requestReport.Pictures is null)
-            {
-                newsreport.Pictures = null;
-            }
-            else 
-            {
-                newsreport.Pictures = PictureConverter.SaveImageGetPath(requestReport.Pictures, _context.Employee.Find(requestReport.Employee_Id) + "NewsReport");
-            }
-            _context.NewsReports.Add(newsreport);
+            _context.NewsReport.Add(newsreport);
             _context.SaveChanges();
 
-            return Ok("Предприятие зарегистрировано");
+            return Ok("Пост зарегистрирован.");
         }
     }
 }
