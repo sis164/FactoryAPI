@@ -8,14 +8,14 @@ namespace FactoryAPI.Models.RequestBodies
         public string Description { get; set; }
         public string Phone_number { get; set; }
         public string[] Pictures { get; set; }
-        public RequestFactory(string name, string description, string phone_number, string[] pictures)
+        public RequestFactory()
         {
-            Name = name;
-            Description = description;
-            Phone_number = phone_number;
-            Pictures = pictures;
+            Name = string.Empty;
+            Description = string.Empty;
+            Phone_number = string.Empty;
+            Pictures = Array.Empty<string>();
         }
-        public RequestFactory (Factory factory)
+        public RequestFactory(Factory factory)
         {
             Name = factory.Name;
             Description = factory.Description;

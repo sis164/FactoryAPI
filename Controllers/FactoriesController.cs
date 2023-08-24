@@ -38,16 +38,17 @@ namespace FactoryAPI.Controllers
 
         [Authorize]
         [HttpPost(Name = "PostFactory")]
-        public IActionResult PostFactory([FromBody] RequestFactory requestFactory)
+        public IActionResult PostFactory([FromHeader] string Authorization, [FromBody] RequestFactory requestFactory)
         {
             if (RegexValidator.IsValidCompanyName(requestFactory.Name) && RegexValidator.IsValidPhone_number(requestFactory.Phone_number))
             {
                 Factory factory = new()
                 {
                     Name = requestFactory.Name,
-                    Description = requestFactory.Description, 
-                    Phone_number = requestFactory.Phone_number, 
-                    Picture = PictureConverter.SaveImageGetPath(requestFactory.Pictures, requestFactory.Name + "Factory")
+                    Description = requestFactory.Description,
+                    Phone_number = requestFactory.Phone_number,
+                    Picture = PictureConverter.SaveImageGetPath(requestFactory.Pictures, requestFactory.Name + "Factory"),
+                    Owner_Id = TokenDecoder.GetIdFromToken(Authorization),
                 };
                 _context.Factory.Add(factory);
                 _context.SaveChanges();
@@ -83,6 +84,21 @@ namespace FactoryAPI.Controllers
             factory.Employee_id.Add(employee_id);
             _context.SaveChanges();
             return Ok("Изменения успешно проведены");
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("all-factories")]
+        public IActionResult GetAllFactories([FromHeader] string Authorization)
+        {
+            int ownerId = TokenDecoder.GetIdFromToken(Authorization);
+            var factories = _context.Factory.Where(factory=>factory.Owner_Id == ownerId).ToList();
+            List<RequestFactory> result = new();
+            foreach(Factory factory in factories)
+            {
+                result.Add(new RequestFactory(factory));
+            }
+            return Ok(result);
         }
     }
 }
