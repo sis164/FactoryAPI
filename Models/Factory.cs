@@ -10,6 +10,7 @@
         public string Phone_number { get; set; }
         public int[]? Services { get; set; }
         public List<int>? Employee_id { get; set; }
+        public long Total_likes { get; set; }
 
         public Factory()
         {

@@ -1,4 +1,7 @@
-﻿using System.Xml.Linq;
+﻿using FactoryAPI.Models.RequestBodies;
+using FactoryAPI.Utilities;
+using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace FactoryAPI.Models
 {
@@ -10,12 +13,20 @@ namespace FactoryAPI.Models
         public int Service_Id { get; set; }
         public int Factory_Id { get; set; }
         public int Employee_Id { get; set; }
-        public int Likes {get; set; }
+        public int Likes { get; set; }
 
         public NewsReport()
         {
             Description = string.Empty;
             Pictures = string.Empty;
+        }
+        public NewsReport(RequestNewsReport requestReport)
+        {
+            Factory_Id = requestReport.Factory_Id;
+            Service_Id = requestReport.Service_Id;
+            Employee_Id = requestReport.Employee_Id;
+                Description = requestReport.Description;
+            Likes = requestReport.Likes;
         }
 
     }

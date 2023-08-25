@@ -88,8 +88,6 @@ namespace FactoryAPI
             app.MapGet("/", (HttpResponse httpresponse) => httpresponse.Redirect("/swagger/index.html"));
 
             app.Run();
-
-
         }
 
     }

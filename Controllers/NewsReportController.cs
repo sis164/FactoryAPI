@@ -23,7 +23,7 @@ namespace FactoryAPI.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult GetFactory([FromQuery] int id)
+        public IActionResult GetNewsReport([FromQuery] int id)
         {
             var newsreport = _context.NewsReport.Find(id);
 
@@ -39,23 +39,80 @@ namespace FactoryAPI.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult PostFactory([FromBody] RequestNewsReport requestReport)
+        [Route("add-like")]
+        public IActionResult AddLike([FromBody] int newsReportId)
+        {
+            var newsReport = _context.NewsReport.Find(newsReportId);
+            if (newsReport is null)
+            {
+                return BadRequest("Нет поста с таким id");
+            }
+            var factory = _context.Factory.Find(newsReport.Factory_Id);
+            if (factory is null)
+            {
+                return BadRequest("Неправильно привязан пост к объекту");
+            }
+            newsReport.Likes++;
+            factory.Total_likes++;
+            _context.SaveChanges();
+            return Ok("Лайк успешно поставлен.");
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("delete-like")]
+        public IActionResult DeleteLike([FromBody] int newsReportId)
+        {
+            var newsReport = _context.NewsReport.Find(newsReportId);
+            if (newsReport is null)
+            {
+                return BadRequest("Нет поста с таким id");
+            }
+            var factory = _context.Factory.Find(newsReport.Factory_Id);
+            if (factory is null)
+            {
+                return BadRequest("Неправильно привязан пост к объекту");
+            }
+            if (newsReport.Likes > 0)
+                newsReport.Likes--;
+            if (factory.Total_likes > 0)
+                factory.Total_likes--;
+            _context.SaveChanges();
+            return Ok("Лайк успешно убран.");
+        }
+
+    //    [Authorize]
+        [HttpPost]
+        public IActionResult PostNewsReport([FromBody] RequestNewsReport requestReport)
         {
             if (requestReport is null)
             {
                 return BadRequest("Данные введены не корекктно");
             }
 
-            NewsReport newsreport = new()
+            var factory = _context.Factory.Find(requestReport.Factory_Id);
+            if (factory is null)
             {
-                Factory_Id = requestReport.Factory_Id,
-                Service_Id = requestReport.Service_Id,
-                Employee_Id = requestReport.Employee_Id,
-                Description = requestReport.Description,
-                Likes = requestReport.Likes,
-                Pictures = (requestReport.Pictures is null) ? null : PictureConverter.SaveImageGetPath(requestReport.Pictures, _context.Factory.Find(requestReport.Factory_Id)!.Name + "NewsReport")
+                return BadRequest("Нет объекта с таким id");
+            }
+
+            //var service = _context.Service.Find(requestReport.Service_Id);
+            //if (service is null)
+            //{
+            //    return BadRequest("Нет услуги с таким id");
+            //}
+
+            //var employee = _context.Employee.Find(requestReport.Employee_Id);
+            //if (employee is null)
+            //{
+            //    return BadRequest("Нет работника с таким id");
+            //}
+
+            NewsReport newsReport = new(requestReport)
+            {
+                Pictures = (requestReport.Pictures is null) ? null : PictureConverter.SaveImageGetPath(requestReport.Pictures, factory.Name + "NewsReport")
             };
-            _context.NewsReport.Add(newsreport);
+            _context.NewsReport.Add(newsReport);
             _context.SaveChanges();
 
             return Ok("Пост зарегистрирован.");
