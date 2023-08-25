@@ -4,6 +4,8 @@ using FactoryAPI.Utilities;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore.Query.Internal;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FactoryAPI
 {
@@ -27,17 +29,17 @@ namespace FactoryAPI
                 });
                 swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                {
-                    new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference
+                        new OpenApiSecurityScheme
                         {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    Array.Empty<string>()
-                }
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
                 });
             });
             builder.Services.AddControllers(); // Register controllers
@@ -47,12 +49,10 @@ namespace FactoryAPI
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-
                     // укзывает, будет ли валидироваться издатель при валидации токена(SSL)
                     ValidateIssuer = true,
                     // строка, представляющая издателя
                     ValidIssuer = AuthOptions.ISSUER,
-
                     // будет ли валидироваться потребитель токена
                     ValidateAudience = true,
                     // установка потребителя токена
@@ -64,7 +64,7 @@ namespace FactoryAPI
                     // установка ключа безопасности
                     IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                     // валидация ключа безопасности
-                    ValidateIssuerSigningKey = true,
+                    ValidateIssuerSigningKey = true
                 };
             });
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -85,7 +85,7 @@ namespace FactoryAPI
             });
             app.UseHttpsRedirection();
 
-            app.MapGet("/", () => "Successfully connected to FactoryAPI!");
+            app.MapGet("/", (HttpResponse httpresponse) => httpresponse.Redirect("/swagger/index.html"));
 
             app.Run();
 
