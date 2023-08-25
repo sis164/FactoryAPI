@@ -18,7 +18,7 @@ namespace FactoryAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet(Name = "GetClient")]
+        [HttpGet]
         public IActionResult GetClient(int id)
         {
             var client = _context.Client.Find(id);
@@ -32,7 +32,7 @@ namespace FactoryAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost(Name = "PostClient")]
+        [HttpPost]
         public IActionResult PostClient([FromBody] RequestClient requestClient)
         {
             if (!RegexValidator.IsValidName(requestClient.FirstName))

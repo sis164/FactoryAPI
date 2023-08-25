@@ -19,7 +19,7 @@ namespace FactoryAPI.Controllers
 
 
         [Authorize]
-        [HttpGet(Name = "GetService")]
+        [HttpGet]
         public IActionResult GetService(int id)
         {
             Service? service;
@@ -34,7 +34,7 @@ namespace FactoryAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost(Name = "PostService")]
+        [HttpPost]
         public IActionResult PostService([FromBody] RequestService requestService)
         {
             Service service = new(requestService.Name, requestService.Description, requestService.Cost, PictureConverter.SaveImageGetPath(requestService.Pictures, requestService.Name + "Service"));

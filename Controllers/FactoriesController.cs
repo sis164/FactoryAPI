@@ -21,7 +21,7 @@ namespace FactoryAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet(Name = "GetFactory")]
+        [HttpGet]
         public IActionResult GetFactory([FromQuery] int id)
         {
             var factory = _context.Factory.Find(id);
@@ -37,7 +37,7 @@ namespace FactoryAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost(Name = "PostFactory")]
+        [HttpPost]
         public IActionResult PostFactory([FromHeader] string Authorization, [FromBody] RequestFactory requestFactory)
         {
             if (RegexValidator.IsValidCompanyName(requestFactory.Name) && RegexValidator.IsValidPhone_number(requestFactory.Phone_number))
@@ -61,7 +61,7 @@ namespace FactoryAPI.Controllers
         }
 
         [Authorize]
-        [HttpPut(Name = "AddEmployee")]
+        [HttpPut]
         public IActionResult PutEmployee(int employee_id, int factory_id)
         {
             if (_context.Employee.Find(employee_id) is null)

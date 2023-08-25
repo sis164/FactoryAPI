@@ -22,7 +22,7 @@ namespace FactoryAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet(Name = "GetNewsReport")]
+        [HttpGet]
         public IActionResult GetFactory([FromQuery] int id)
         {
             var newsreport = _context.NewsReport.Find(id);
@@ -38,7 +38,7 @@ namespace FactoryAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost(Name = "PostNewsReport")]
+        [HttpPost]
         public IActionResult PostFactory([FromBody] RequestNewsReport requestReport)
         {
             if (requestReport is null)

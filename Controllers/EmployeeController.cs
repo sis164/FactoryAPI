@@ -17,7 +17,7 @@ namespace FactoryAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet(Name = "GetEmployee")]
+        [HttpGet]
         public IActionResult GetEmployee(int Id)
         {
             var employee = _context.Employee.Find(Id);

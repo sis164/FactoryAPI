@@ -12,7 +12,6 @@ namespace FactoryAPI.Controllers
     [Route("/[controller]")]
     public class ConfirmationController : Controller
     {
-
         [HttpGet]
         public IActionResult GetConfirmationCode()
         {
